@@ -1,0 +1,30 @@
+services:
+  mysql:
+    image: mysql:latest
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DBROOT_PASSWORD}
+      MYSQL_DATABASE: ${DATASOURCE_DATABASE}
+      MYSQL_USER: ${DATASOURCE_USERNAME}
+      MYSQL_PASSWORD: ${DATASOURCE_PASSWORD}
+    ports:
+      - ${DATASOURCE_PORTS}
+    volumes:
+      - mysql-data:/var/lib/mysql
+
+  # app:
+  #   image: recipes-app
+  #   build:
+  #     context: .
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - ${DOCKER_PORTS}
+  #   environment:
+  #     SPRING_DATASOURCE_URL: ${DATASOURCE_URL}
+  #     SPRING_DATASOURCE_USERNAME: ${DATASOURCE_USERNAME}
+  #     SPRING_DATASOURCE_PASSWORD: ${DATASOURCE_PASSWORD}
+  #   depends_on:
+  #     - mysql
+
+volumes:
+  mysql-data:

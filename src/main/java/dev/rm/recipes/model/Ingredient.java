@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -17,8 +16,8 @@ import java.util.UUID;
 public class Ingredient {
 
   @Id
-  @GeneratedValue
-  private UUID ingredientId;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long ingredientId;
 
   @Column(nullable = false)
   private String name;
@@ -27,5 +26,5 @@ public class Ingredient {
   private String quantity;
 
   @Column(name = "recipe_id", nullable = false)
-  private UUID recipeId;
+  private Long recipeId;
 }

@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -19,11 +18,11 @@ import java.util.UUID;
 public class Recipe {
 
   @Id
-  @GeneratedValue
-  private UUID recipeId;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long recipeId;
 
   @Column(nullable = false)
-  private UUID userId;
+  private Long userId;
 
   @Column(nullable = false)
   private String name;

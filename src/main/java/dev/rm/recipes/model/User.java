@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -21,8 +20,8 @@ import java.util.UUID;
 public class User {
 
   @Id
-  @GeneratedValue
-  private UUID userId;
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  private Long userId;
 
   @Column(nullable = false)
   private String username;
@@ -31,7 +30,10 @@ public class User {
   private String email;
 
   @Column(nullable = false)
-  private String passwordHash;
+  private String password;
+
+  @Enumerated(EnumType.STRING)
+  private Role role;
 
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;

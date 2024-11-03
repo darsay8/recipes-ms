@@ -4,9 +4,13 @@ import dev.rm.recipes.model.Ingredient;
 import java.util.List;
 
 public interface IngredientService {
-  Ingredient addIngredient(Ingredient ingredient);
+  Ingredient createIngredient(Ingredient ingredient);
 
-  List<Ingredient> getIngredientsByRecipeId(Long recipeId);
+  Ingredient getIngredientById(Long id);
 
-  void deleteIngredient(Long ingredientId);
+  List<Ingredient> getAllIngredients();
+
+  Ingredient updateIngredient(Long id, Ingredient ingredient);
+
+  void deleteIngredient(Long id);
 }

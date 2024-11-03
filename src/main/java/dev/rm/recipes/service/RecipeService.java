@@ -6,13 +6,11 @@ import java.util.List;
 public interface RecipeService {
   Recipe createRecipe(Recipe recipe);
 
-  Recipe getRecipeById(Long recipeId);
+  Recipe getRecipeById(Long id);
 
   List<Recipe> getAllRecipes();
 
-  List<Recipe> getRecipesByUserId(Long userId);
+  Recipe updateRecipe(Long id, Recipe recipe);
 
-  Recipe updateRecipe(Long recipeId, Recipe recipe);
-
-  void deleteRecipe(Long recipeId);
+  void deleteRecipe(Long id);
 }

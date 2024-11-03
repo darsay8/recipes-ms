@@ -5,10 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import dev.rm.recipes.model.SavedRecipe;
 
 import java.util.List;
-import java.util.UUID;
 
-public interface SavedRecipeRepository extends JpaRepository<SavedRecipe, UUID> {
-  List<SavedRecipe> findByUserId(UUID userId);
+public interface SavedRecipeRepository extends JpaRepository<SavedRecipe, Long> {
+  List<SavedRecipe> findByUserId(Long userId);
 
-  List<SavedRecipe> findByRecipeId(UUID recipeId);
+  List<SavedRecipe> findByRecipeId(Long recipeId);
 }

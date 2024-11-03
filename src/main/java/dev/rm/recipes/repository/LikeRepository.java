@@ -5,10 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import dev.rm.recipes.model.Like;
 
 import java.util.List;
-import java.util.UUID;
 
-public interface LikeRepository extends JpaRepository<Like, UUID> {
-  List<Like> findByUserId(UUID userId);
+public interface LikeRepository extends JpaRepository<Like, Long> {
+  List<Like> findByUserId(Long userId);
 
-  List<Like> findByRecipeId(UUID recipeId);
+  List<Like> findByRecipeId(Long recipeId);
 }

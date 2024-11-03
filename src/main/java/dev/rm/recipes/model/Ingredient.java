@@ -17,14 +17,12 @@ public class Ingredient {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long ingredientId;
+  @Column(name = "id")
+  private Long id;
 
-  @Column(nullable = false)
+  @Column(name = "name", nullable = false)
   private String name;
 
-  @Column(nullable = false)
+  @Column(name = "quantity", nullable = false)
   private String quantity;
-
-  @Column(name = "recipe_id", nullable = false)
-  private Long recipeId;
 }

@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-import java.util.UUID;
 
 @Data
 @Builder
@@ -19,13 +18,13 @@ public class SavedRecipe {
 
   @Id
   @GeneratedValue
-  private UUID savedRecipeId;
+  private Long savedRecipeId;
 
   @Column(nullable = false)
-  private UUID userId;
+  private Long userId;
 
   @Column(nullable = false)
-  private UUID recipeId;
+  private Long recipeId;
 
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;

@@ -4,6 +4,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import dev.rm.recipes.model.Difficulty;
+import dev.rm.recipes.model.MealType;
 import dev.rm.recipes.model.Recipe;
 import dev.rm.recipes.service.RecipeService;
 
@@ -48,4 +50,15 @@ public class RecipeController {
     recipeService.deleteRecipe(id);
     return ResponseEntity.noContent().build();
   }
+
+  @GetMapping("/search")
+  public ResponseEntity<List<Recipe>> searchRecipes(
+      @RequestParam(value = "name", required = false) String name,
+      @RequestParam(value = "mealType", required = false) MealType mealType,
+      @RequestParam(value = "countryOfOrigin", required = false) String countryOfOrigin,
+      @RequestParam(value = "difficulty", required = false) Difficulty difficulty) {
+    List<Recipe> recipes = recipeService.searchRecipes(name, mealType, countryOfOrigin, difficulty);
+    return ResponseEntity.ok(recipes);
+  }
+
 }

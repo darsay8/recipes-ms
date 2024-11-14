@@ -37,7 +37,7 @@ public class AuthService {
     try {
       Authentication authentication = authenticationManager.authenticate(
           new UsernamePasswordAuthenticationToken(
-              loginRequest.getUsername(),
+              loginRequest.getEmail(),
               loginRequest.getPassword()));
 
       SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -51,7 +51,7 @@ public class AuthService {
           .build();
 
     } catch (BadCredentialsException e) {
-      throw new AuthenticationException("Invalid username or password");
+      throw new AuthenticationException("Invalid email or password");
     }
   }
 
@@ -70,6 +70,10 @@ public class AuthService {
       throw new UserAlreadyExistsException("Username already exists");
     }
 
+    if (userRepository.existsByEmail(registerRequest.getEmail())) {
+      throw new UserAlreadyExistsException("User with this email already exists");
+    }
+
     User newUser = User.builder()
         .username(registerRequest.getUsername())
         .password(passwordEncoder.encode(registerRequest.getPassword()))
@@ -81,7 +85,7 @@ public class AuthService {
 
     Authentication authentication = authenticationManager.authenticate(
         new UsernamePasswordAuthenticationToken(
-            newUser.getUsername(),
+            newUser.getEmail(),
             registerRequest.getPassword()));
 
     SecurityContextHolder.getContext().setAuthentication(authentication);

@@ -21,11 +21,18 @@ public class Recipe {
   @Column(name = "id")
   private Long id;
 
+  @ManyToOne
+  @JoinColumn(name = "id_user")
+  private User user;
+
   @Column(name = "name", nullable = false)
   private String name;
 
   @Column(name = "image", nullable = false)
   private String image;
+
+  @Column(name = "video_url")
+  private String videoUrl;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "meal_type", nullable = false)

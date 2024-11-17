@@ -20,11 +20,13 @@ public class Like {
   @GeneratedValue
   private Long likeId;
 
-  @Column(nullable = false)
-  private Long userId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "recipe_id", nullable = false)
+  private Recipe recipe;
 
-  @Column(nullable = false)
-  private Long recipeId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", nullable = false)
+  private User user;
 
   @Column(name = "created_at", nullable = false, updatable = false)
   private LocalDateTime createdAt;

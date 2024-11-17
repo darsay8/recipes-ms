@@ -1,35 +1,35 @@
 package dev.rm.recipes.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import dev.rm.recipes.model.User;
 import dev.rm.recipes.service.UserService;
+import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
 
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class UserController {
 
-  private static final Logger logger = LoggerFactory.getLogger(UserController.class);
-
   @Autowired
   private UserService userService;
 
-  @Autowired
+  public UserController(UserService userService) {
+    this.userService = userService;
+  }
 
   @GetMapping("/users")
   public ResponseEntity<List<User>> getAllUsers() {
     List<User> users = userService.getAllUsers();
     if (users.isEmpty()) {
-      logger.info("No users found.");
+      log.info("No users found.");
       return ResponseEntity.noContent().build();
     } else {
-      logger.info("Returning {} users.", users.size());
+      log.info("Returning {} users.", users.size());
       return ResponseEntity.ok(users);
     }
   }
@@ -38,10 +38,10 @@ public class UserController {
   public ResponseEntity<User> getUserById(@PathVariable Long id) {
     try {
       User user = userService.getUserById(id);
-      logger.info("Returning user with id {}", id);
+      log.info("Returning user with id {}", id);
       return ResponseEntity.ok(user);
     } catch (RuntimeException e) {
-      logger.error("Error fetching user with id {}: {}", id, e.getMessage());
+      log.error("Error fetching user with id {}: {}", id, e.getMessage());
       return ResponseEntity.notFound().build();
     }
   }
@@ -50,10 +50,10 @@ public class UserController {
   public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
     try {
       userService.deleteUser(id);
-      logger.info("Deleted user with id {}", id);
+      log.info("Deleted user with id {}", id);
       return ResponseEntity.noContent().build();
     } catch (RuntimeException e) {
-      logger.error("Error deleting user with id {}: {}", id, e.getMessage());
+      log.error("Error deleting user with id {}: {}", id, e.getMessage());
       return ResponseEntity.notFound().build();
     }
   }

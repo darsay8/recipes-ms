@@ -5,8 +5,6 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -20,16 +18,17 @@ import dev.rm.recipes.model.User;
 import dev.rm.recipes.repository.UserRepository;
 import dev.rm.recipes.security.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.http.HttpStatus;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
 
   private final AuthenticationManager authenticationManager;
   private final JwtTokenProvider tokenProvider;
-  private final UserDetailsService userDetailsService;
   private final UserRepository userRepository;
   private final PasswordEncoder passwordEncoder;
 
@@ -104,7 +103,6 @@ public class AuthService {
     try {
       if (tokenProvider.validateToken(token)) {
         String username = tokenProvider.getUsernameFromToken(token);
-        UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
         return TokenValidationResponse.builder()
             .valid(true)
@@ -113,7 +111,7 @@ public class AuthService {
             .build();
       }
     } catch (Exception e) {
-      // Token validation failed
+      log.error("Token validation failed: {}", e.getMessage(), e);
     }
 
     return TokenValidationResponse.builder()

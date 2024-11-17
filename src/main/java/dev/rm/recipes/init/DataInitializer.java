@@ -109,7 +109,7 @@ public class DataInitializer implements CommandLineRunner {
         .mealType(MealType.DINNER)
         .countryOfOrigin("Italy")
         .difficulty(Difficulty.MEDIUM)
-        .instructions("Cook spaghetti, fry pancetta, mix with egg and cheese, combine.")
+        .instructions("Cook spaghetti, fry pancetta, mix with egg and cheese,combine.")
         .ingredients(Arrays.asList(
             Ingredient.builder().name("Spaghetti").quantity("400g").build(),
             Ingredient.builder().name("Pancetta").quantity("150g").build(),
@@ -152,7 +152,8 @@ public class DataInitializer implements CommandLineRunner {
             Ingredient.builder().name("Cheese").quantity("1 cup").build()))
         .build();
 
-    recipeRepository.saveAll(Arrays.asList(recipe1, recipe2, recipe3, recipe4, recipe5));
+    recipeRepository.saveAll(Arrays.asList(recipe1, recipe2, recipe3, recipe4,
+        recipe5));
 
     Comment comment1 = Comment.builder()
         .user(user1)

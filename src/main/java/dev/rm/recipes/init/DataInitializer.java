@@ -42,30 +42,38 @@ public class DataInitializer implements CommandLineRunner {
     this.commentRepository = commentRepository;
   }
 
+  public static final String PASSWORD = "123ABC";
+
   @Override
   public void run(String... args) {
     User user1 = User.builder()
         .username("james")
         .email("james@mail.com")
-        .password(passwordEncoder.encode("123ABC"))
+        .password(passwordEncoder.encode(PASSWORD))
         .role(Role.ADMIN)
         .build();
 
     User user2 = User.builder()
         .username("hank")
         .email("hank@mail.com")
-        .password(passwordEncoder.encode("123ABC"))
+        .password(passwordEncoder.encode(PASSWORD))
         .role(Role.USER)
         .build();
 
     User user3 = User.builder()
         .username("sarah")
         .email("sarah@mail.com ")
-        .password(passwordEncoder.encode("123ABC"))
+        .password(passwordEncoder.encode(PASSWORD))
         .role(Role.USER)
         .build();
 
     userRepository.saveAll(Arrays.asList(user1, user2, user3));
+
+    Ingredient pancakesIngredient1 = Ingredient.builder().name("Flour").quantity("2 cups").build();
+    Ingredient pancakesIngredient2 = Ingredient.builder().name("Milk").quantity("1.5 cups").build();
+    Ingredient pancakesIngredient3 = Ingredient.builder().name("Eggs").quantity("2").build();
+    Ingredient pancakesIngredient4 = Ingredient.builder().name("Baking Powder").quantity("1 tbsp").build();
+    Ingredient pancakesIngredient5 = Ingredient.builder().name("Salt").quantity("1 tsp").build();
 
     Recipe recipe1 = Recipe.builder()
         .user(user1)
@@ -76,13 +84,18 @@ public class DataInitializer implements CommandLineRunner {
         .countryOfOrigin("USA")
         .difficulty(Difficulty.EASY)
         .instructions("Mix ingredients, pour onto skillet, flip when bubbles form.")
-        .ingredients(Arrays.asList(
-            Ingredient.builder().name("Flour").quantity("2 cups").build(),
-            Ingredient.builder().name("Milk").quantity("1.5 cups").build(),
-            Ingredient.builder().name("Eggs").quantity("2").build(),
-            Ingredient.builder().name("Baking Powder").quantity("1 tbsp").build(),
-            Ingredient.builder().name("Salt").quantity("1 tsp").build()))
+        .ingredients(Arrays.asList(pancakesIngredient1, pancakesIngredient2,
+            pancakesIngredient3, pancakesIngredient4,
+            pancakesIngredient5))
         .build();
+
+    recipe1.setIngredientsWithRecipe(Arrays.asList(pancakesIngredient1, pancakesIngredient2, pancakesIngredient3,
+        pancakesIngredient4, pancakesIngredient5));
+
+    Ingredient saladIngredient1 = Ingredient.builder().name("Romaine Lettuce").quantity("1 head").build();
+    Ingredient saladIngredient2 = Ingredient.builder().name("Croutons").quantity("1 cup").build();
+    Ingredient saladIngredient3 = Ingredient.builder().name("Caesar Dressing").quantity("1/2 cup").build();
+    Ingredient saladIngredient4 = Ingredient.builder().name("Parmesan Cheese").quantity("1/4 cup").build();
 
     Recipe recipe2 = Recipe.builder()
         .user(user1)
@@ -93,12 +106,17 @@ public class DataInitializer implements CommandLineRunner {
         .countryOfOrigin("Italy")
         .difficulty(Difficulty.EASY)
         .instructions("Combine lettuce, croutons, and dressing. Toss to combine.")
-        .ingredients(Arrays.asList(
-            Ingredient.builder().name("Romaine Lettuce").quantity("1 head").build(),
-            Ingredient.builder().name("Croutons").quantity("1 cup").build(),
-            Ingredient.builder().name("Caesar Dressing").quantity("1/2 cup").build(),
-            Ingredient.builder().name("Parmesan Cheese").quantity("1/4 cup").build()))
+        .ingredients(Arrays.asList(saladIngredient1, saladIngredient2, saladIngredient3, saladIngredient4))
         .build();
+
+    recipe2.setIngredientsWithRecipe(
+        Arrays.asList(saladIngredient1, saladIngredient2, saladIngredient3, saladIngredient4));
+
+    Ingredient spaghettiIngredient1 = Ingredient.builder().name("Spaghetti").quantity("400g").build();
+    Ingredient spaghettiIngredient2 = Ingredient.builder().name("Pancetta").quantity("150g").build();
+    Ingredient spaghettiIngredient3 = Ingredient.builder().name("Eggs").quantity("3").build();
+    Ingredient spaghettiIngredient4 = Ingredient.builder().name("Parmesan Cheese").quantity("100g").build();
+    Ingredient spaghettiIngredient5 = Ingredient.builder().name("Black Pepper").quantity("to taste").build();
 
     Recipe recipe3 = Recipe.builder()
         .user(user1)
@@ -109,14 +127,19 @@ public class DataInitializer implements CommandLineRunner {
         .mealType(MealType.DINNER)
         .countryOfOrigin("Italy")
         .difficulty(Difficulty.MEDIUM)
-        .instructions("Cook spaghetti, fry pancetta, mix with egg and cheese,combine.")
-        .ingredients(Arrays.asList(
-            Ingredient.builder().name("Spaghetti").quantity("400g").build(),
-            Ingredient.builder().name("Pancetta").quantity("150g").build(),
-            Ingredient.builder().name("Eggs").quantity("3").build(),
-            Ingredient.builder().name("Parmesan Cheese").quantity("100g").build(),
-            Ingredient.builder().name("Black Pepper").quantity("to taste").build()))
+        .instructions("Cook spaghetti, fry pancetta, mix with egg andcheese,combine.")
+        .ingredients(Arrays.asList(spaghettiIngredient1, spaghettiIngredient2, spaghettiIngredient3,
+            spaghettiIngredient4, spaghettiIngredient5))
         .build();
+
+    recipe3.setIngredientsWithRecipe(Arrays.asList(spaghettiIngredient1, spaghettiIngredient2, spaghettiIngredient3,
+        spaghettiIngredient4, spaghettiIngredient5));
+
+    Ingredient cookieIngredient1 = Ingredient.builder().name("Butter").quantity("1 cup").build();
+    Ingredient cookieIngredient2 = Ingredient.builder().name("Brown Sugar").quantity("1 cup").build();
+    Ingredient cookieIngredient3 = Ingredient.builder().name("Eggs").quantity("2").build();
+    Ingredient cookieIngredient4 = Ingredient.builder().name("Flour").quantity("2.5 cups").build();
+    Ingredient cookieIngredient5 = Ingredient.builder().name("Chocolate Chips").quantity("2 cups").build();
 
     Recipe recipe4 = Recipe.builder()
         .user(user2)
@@ -127,13 +150,18 @@ public class DataInitializer implements CommandLineRunner {
         .countryOfOrigin("USA")
         .difficulty(Difficulty.EASY)
         .instructions("Cream butter and sugar, add eggs, mix in flour and chips.")
-        .ingredients(Arrays.asList(
-            Ingredient.builder().name("Butter").quantity("1 cup").build(),
-            Ingredient.builder().name("Brown Sugar").quantity("1 cup").build(),
-            Ingredient.builder().name("Eggs").quantity("2").build(),
-            Ingredient.builder().name("Flour").quantity("2.5 cups").build(),
-            Ingredient.builder().name("Chocolate Chips").quantity("2 cups").build()))
+        .ingredients(Arrays.asList(cookieIngredient1, cookieIngredient2, cookieIngredient3, cookieIngredient4,
+            cookieIngredient5))
         .build();
+
+    recipe4.setIngredientsWithRecipe(Arrays.asList(cookieIngredient1, cookieIngredient2, cookieIngredient3,
+        cookieIngredient4, cookieIngredient5));
+
+    Ingredient tacosIngredient1 = Ingredient.builder().name("Ground Beef").quantity("500g").build();
+    Ingredient tacosIngredient2 = Ingredient.builder().name("Taco Shells").quantity("10").build();
+    Ingredient tacosIngredient3 = Ingredient.builder().name("Lettuce").quantity("1 cup").build();
+    Ingredient tacosIngredient4 = Ingredient.builder().name("Tomato").quantity("1 cup").build();
+    Ingredient tacosIngredient5 = Ingredient.builder().name("Cheese").quantity("1 cup").build();
 
     Recipe recipe5 = Recipe.builder()
         .user(user3)
@@ -144,13 +172,13 @@ public class DataInitializer implements CommandLineRunner {
         .countryOfOrigin("Mexico")
         .difficulty(Difficulty.MEDIUM)
         .instructions("Cook beef, add spices, serve in tortillas with toppings.")
-        .ingredients(Arrays.asList(
-            Ingredient.builder().name("Ground Beef").quantity("500g").build(),
-            Ingredient.builder().name("Taco Shells").quantity("10").build(),
-            Ingredient.builder().name("Lettuce").quantity("1 cup").build(),
-            Ingredient.builder().name("Tomato").quantity("1 cup").build(),
-            Ingredient.builder().name("Cheese").quantity("1 cup").build()))
+        .ingredients(
+            Arrays.asList(tacosIngredient1, tacosIngredient2, tacosIngredient3, tacosIngredient4, tacosIngredient5))
         .build();
+
+    recipe5
+        .setIngredientsWithRecipe(Arrays.asList(tacosIngredient1, tacosIngredient2, tacosIngredient3, tacosIngredient4,
+            tacosIngredient5));
 
     recipeRepository.saveAll(Arrays.asList(recipe1, recipe2, recipe3, recipe4,
         recipe5));
@@ -163,5 +191,4 @@ public class DataInitializer implements CommandLineRunner {
 
     commentRepository.save(comment1);
   }
-
 }

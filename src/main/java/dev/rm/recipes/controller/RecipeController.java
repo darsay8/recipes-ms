@@ -7,6 +7,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import dev.rm.recipes.model.Difficulty;
+import dev.rm.recipes.model.Ingredient;
 import dev.rm.recipes.model.MealType;
 import dev.rm.recipes.model.Recipe;
 import dev.rm.recipes.model.User;
@@ -39,6 +40,10 @@ public class RecipeController {
     User user = userService.getUserByEmail(currentUsername);
 
     recipe.setUser(user);
+
+    for (Ingredient ingredient : recipe.getIngredients()) {
+      ingredient.setRecipe(recipe);
+    }
 
     Recipe createdRecipe = recipeService.createRecipe(recipe);
     return new ResponseEntity<>(createdRecipe, HttpStatus.CREATED);

@@ -8,11 +8,18 @@ import lombok.NoArgsConstructor;
 import jakarta.persistence.*;
 import java.util.List;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@JsonIgnoreProperties({ "user", "hibernateLazyInitializer", "handler" })
 @Table(name = "recipes")
 public class Recipe {
 
@@ -21,8 +28,9 @@ public class Recipe {
   @Column(name = "id")
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id_user")
+  @OnDelete(action = OnDeleteAction.CASCADE)
   private User user;
 
   @Column(name = "name", nullable = false)
@@ -38,8 +46,9 @@ public class Recipe {
   @Column(name = "meal_type", nullable = false)
   private MealType mealType;
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "recipe_id")
+  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, orphanRemoval = true)
+  @JsonManagedReference
+  // @OrderColumn(name = "ingredient_order")
   private List<Ingredient> ingredients;
 
   @Column(name = "country_of_origin")
@@ -51,4 +60,16 @@ public class Recipe {
 
   @Column(name = "instructions", nullable = false)
   private String instructions;
+
+  public Long getUserId() {
+    return user != null ? user.getUserId() : null;
+  }
+
+  public void setIngredientsWithRecipe(List<Ingredient> ingredients) {
+    this.ingredients = ingredients;
+    for (Ingredient ingredient : ingredients) {
+      ingredient.setRecipe(this);
+    }
+  }
+
 }

@@ -1,4 +1,4 @@
-package dev.rm.recipes.service;
+package dev.rm.recipes.security;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -25,8 +25,9 @@ public class CustomUserDetailsService implements UserDetailsService {
     User user = userRepository.findByEmail(email)
         .orElseThrow(() -> new UsernameNotFoundException("User not found with email: " + email));
 
-    return new org.springframework.security.core.userdetails.User(
+    return new CustomUserDetails(
         user.getEmail(),
+        user.getUsername(),
         user.getPassword(),
         Collections.singletonList(new SimpleGrantedAuthority(user.getRole().name())));
   }

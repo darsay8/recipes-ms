@@ -36,7 +36,6 @@ public class JwtTokenProvider {
     this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
     this.jwtExpirationInMs = jwtExpirationInMs;
 
-    log.debug("JWT Secret loaded: {}", jwtSecret);
   }
 
   public String generateToken(Authentication authentication) {
@@ -47,13 +46,17 @@ public class JwtTokenProvider {
         .map(GrantedAuthority::getAuthority)
         .collect(Collectors.joining(","));
 
+    CustomUserDetails customUserDetails = (CustomUserDetails) authentication.getPrincipal();
+    String email = customUserDetails.getUsername();
+    String username = customUserDetails.getActualUsername();
+
     return Jwts.builder()
-        .claims()
+        .claim("email", email)
+        .claim("username", username)
+        .claim("roles", roles)
         .subject(authentication.getName())
         .issuedAt(now)
         .expiration(expiryDate)
-        .add("roles", roles)
-        .and()
         .signWith(key)
         .compact();
   }
@@ -72,12 +75,22 @@ public class JwtTokenProvider {
 
   public String getUsernameFromToken(String token) {
     Claims claims = extractAllClaims(token);
-    return claims.getSubject();
+    return claims.get("username", String.class);
+  }
+
+  public String getEmailFromToken(String token) {
+    Claims claims = extractAllClaims(token);
+    return claims.get("email", String.class);
   }
 
   public String getRolesFromToken(String token) {
     Claims claims = extractAllClaims(token);
     return claims.get("roles", String.class);
+  }
+
+  public String extractClaim(String token, String claimKey) {
+    Claims claims = extractAllClaims(token);
+    return claims.get(claimKey, String.class);
   }
 
   private Claims extractAllClaims(String token) {

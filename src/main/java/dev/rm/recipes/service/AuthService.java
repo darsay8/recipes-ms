@@ -17,6 +17,7 @@ import dev.rm.recipes.model.TokenValidationResponse;
 import dev.rm.recipes.model.User;
 import dev.rm.recipes.repository.UserRepository;
 import dev.rm.recipes.security.JwtTokenProvider;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -45,8 +46,9 @@ public class AuthService {
 
       return AuthResponse.builder()
           .token(token)
-          .username(authentication.getName())
-          .roles(tokenProvider.getRolesFromToken(token))
+          .username(tokenProvider.getUsernameFromToken(token))
+          .role(tokenProvider.getRolesFromToken(token))
+          .email(tokenProvider.getEmailFromToken(token))
           .build();
 
     } catch (BadCredentialsException e) {
@@ -94,8 +96,8 @@ public class AuthService {
     return AuthResponse.builder()
         .token(token)
         .username(newUser.getUsername())
-        .roles(newUser.getRole().name())
-        .message("User registered and logged in successfully")
+        .email(newUser.getEmail())
+        .role(newUser.getRole().name())
         .build();
   }
 

@@ -2,6 +2,7 @@ package dev.rm.recipes.service;
 
 import org.springframework.stereotype.Service;
 
+import dev.rm.recipes.exception.BadWordException;
 import dev.rm.recipes.model.Comment;
 import dev.rm.recipes.model.Recipe;
 import dev.rm.recipes.repository.CommentRepository;
@@ -15,11 +16,13 @@ public class CommentServiceImpl implements CommentService {
 
   private final CommentRepository commentRepository;
   private final RecipeService recipeService;
+  private final FilterCommentsService filterCommentsService;
 
   public CommentServiceImpl(CommentRepository commentRepository,
-      RecipeService recipeService) {
+      RecipeService recipeService, FilterCommentsService filterCommentsService) {
     this.commentRepository = commentRepository;
     this.recipeService = recipeService;
+    this.filterCommentsService = new FilterCommentsService();
   }
 
   @Override
@@ -30,6 +33,13 @@ public class CommentServiceImpl implements CommentService {
 
   @Override
   public Comment createComment(Comment comment) {
+
+    if (filterCommentsService.containsBadWords(comment.getContent())) {
+      log.warn("Comment contains bad words: {}", comment.getContent());
+      throw new BadWordException("Comment contains bad words");
+    }
+
     return commentRepository.save(comment);
+
   }
 }

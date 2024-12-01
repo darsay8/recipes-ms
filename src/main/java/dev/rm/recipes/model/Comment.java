@@ -31,7 +31,7 @@ public class Comment {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  private Long id;
+  private Long commentId;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "recipe_id", nullable = false)
@@ -61,7 +61,7 @@ public class Comment {
   }
 
   public Long getRecipeId() {
-    return recipe != null ? recipe.getId() : null;
+    return recipe != null ? recipe.getRecipeId() : null;
   }
 
 }

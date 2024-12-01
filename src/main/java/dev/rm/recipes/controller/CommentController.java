@@ -6,7 +6,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
+import dev.rm.recipes.exception.BadWordException;
 import dev.rm.recipes.model.Comment;
+import dev.rm.recipes.model.ErrorResponse;
 import dev.rm.recipes.model.Recipe;
 import dev.rm.recipes.model.User;
 import dev.rm.recipes.service.CommentService;
@@ -37,21 +39,50 @@ public class CommentController {
     return new ResponseEntity<>(comments, HttpStatus.OK);
   }
 
+  // @PostMapping("/{recipeId}/comments")
+  // public ResponseEntity<Comment> createComment(@PathVariable Long recipeId,
+  // @RequestBody Comment comment) {
+
+  // try {
+  // Authentication authentication =
+  // SecurityContextHolder.getContext().getAuthentication();
+  // String currentUsername = authentication.getName();
+
+  // User user = userService.getUserByEmail(currentUsername);
+
+  // Recipe recipe = recipeService.getRecipeById(recipeId);
+
+  // comment.setUser(user);
+  // comment.setRecipe(recipe);
+
+  // Comment createdComment = commentService.createComment(comment);
+
+  // return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
+  // } catch (BadWordException e) {
+  // ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), "BAD_WORDS");
+  // return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+  // }
+  // }
+
   @PostMapping("/{recipeId}/comments")
-  public ResponseEntity<Comment> createComment(@PathVariable Long recipeId, @RequestBody Comment comment) {
+  public ResponseEntity<Object> createComment(@PathVariable Long recipeId, @RequestBody Comment comment) {
+    try {
+      Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+      String currentUsername = authentication.getName();
 
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-    String currentUsername = authentication.getName();
+      User user = userService.getUserByEmail(currentUsername);
+      Recipe recipe = recipeService.getRecipeById(recipeId);
 
-    User user = userService.getUserByEmail(currentUsername);
+      comment.setUser(user);
+      comment.setRecipe(recipe);
 
-    Recipe recipe = recipeService.getRecipeById(recipeId);
+      Comment createdComment = commentService.createComment(comment);
 
-    comment.setUser(user);
-    comment.setRecipe(recipe);
+      return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
 
-    Comment createdComment = commentService.createComment(comment);
-
-    return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
+    } catch (BadWordException e) {
+      ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), "BAD_WORDS");
+      return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
+    }
   }
 }

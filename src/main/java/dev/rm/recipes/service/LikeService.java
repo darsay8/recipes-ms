@@ -10,5 +10,9 @@ public interface LikeService {
 
   List<Like> getLikesByRecipeId(Long recipeId);
 
+  List<Like> getLikesByUserIdAndRecipeId(Long userId, Long recipeId);
+
+  Long getLikeCount(Long recipeId);
+
   void removeLike(Long likeId);
 }

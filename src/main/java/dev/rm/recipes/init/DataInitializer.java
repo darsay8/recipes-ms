@@ -7,39 +7,34 @@ import org.springframework.stereotype.Component;
 import dev.rm.recipes.model.Comment;
 import dev.rm.recipes.model.Difficulty;
 import dev.rm.recipes.model.Ingredient;
+import dev.rm.recipes.model.Like;
 import dev.rm.recipes.model.MealType;
 import dev.rm.recipes.model.Recipe;
 import dev.rm.recipes.model.Role;
 import dev.rm.recipes.model.User;
 import dev.rm.recipes.repository.CommentRepository;
+import dev.rm.recipes.repository.LikeRepository;
 import dev.rm.recipes.repository.RecipeRepository;
 import dev.rm.recipes.repository.UserRepository;
 
 import java.util.Arrays;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
 @Component
 public class DataInitializer implements CommandLineRunner {
 
-  @Autowired
   private final UserRepository userRepository;
-
-  @Autowired
   private final RecipeRepository recipeRepository;
-
-  @Autowired
   private final CommentRepository commentRepository;
-
-  @Autowired
+  private final LikeRepository likeRepository;
   private final PasswordEncoder passwordEncoder;
 
   public DataInitializer(PasswordEncoder passwordEncoder, UserRepository userRepository,
-      RecipeRepository recipeRepository, CommentRepository commentRepository) {
+      RecipeRepository recipeRepository, CommentRepository commentRepository, LikeRepository likeRepository) {
     this.passwordEncoder = passwordEncoder;
     this.userRepository = userRepository;
     this.recipeRepository = recipeRepository;
     this.commentRepository = commentRepository;
+    this.likeRepository = likeRepository;
   }
 
   public static final String PASSWORD = "123ABC";
@@ -190,5 +185,11 @@ public class DataInitializer implements CommandLineRunner {
         .build();
 
     commentRepository.save(comment1);
+
+    Like like1 = Like.builder().user(user1).recipe(recipe5).build();
+    Like like2 = Like.builder().user(user2).recipe(recipe5).build();
+    Like like3 = Like.builder().user(user3).recipe(recipe5).build();
+
+    likeRepository.saveAll(Arrays.asList(like1, like2, like3));
   }
 }

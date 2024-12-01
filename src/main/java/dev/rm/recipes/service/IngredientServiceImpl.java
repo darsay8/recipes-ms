@@ -22,8 +22,8 @@ public class IngredientServiceImpl implements IngredientService {
   }
 
   @Override
-  public Ingredient getIngredientById(Long id) {
-    return ingredientRepository.findById(id).orElseThrow(() -> new RuntimeException("Ingredient not found"));
+  public Ingredient getIngredientById(Long ingredientId) {
+    return ingredientRepository.findById(ingredientId).orElseThrow(() -> new RuntimeException("Ingredient not found"));
   }
 
   @Override
@@ -34,12 +34,12 @@ public class IngredientServiceImpl implements IngredientService {
   @Override
   public Ingredient updateIngredient(Long id, Ingredient ingredient) {
     Ingredient existingIngredient = getIngredientById(id);
-    ingredient.setId(existingIngredient.getId());
+    ingredient.setIngredientId(existingIngredient.getIngredientId());
     return ingredientRepository.save(ingredient);
   }
 
   @Override
-  public void deleteIngredient(Long id) {
-    ingredientRepository.deleteById(id);
+  public void deleteIngredient(Long ingredientId) {
+    ingredientRepository.deleteById(ingredientId);
   }
 }

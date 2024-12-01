@@ -25,8 +25,8 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public Recipe getRecipeById(Long id) {
-    return recipeRepository.findById(id).orElseThrow(() -> new RuntimeException("Recipe not found"));
+  public Recipe getRecipeById(Long recipeId) {
+    return recipeRepository.findById(recipeId).orElseThrow(() -> new RuntimeException("Recipe not found"));
   }
 
   @Override
@@ -35,15 +35,15 @@ public class RecipeServiceImpl implements RecipeService {
   }
 
   @Override
-  public Recipe updateRecipe(Long id, Recipe recipe) {
-    Recipe existingRecipe = getRecipeById(id);
-    recipe.setId(existingRecipe.getId());
+  public Recipe updateRecipe(Long recipeId, Recipe recipe) {
+    Recipe existingRecipe = getRecipeById(recipeId);
+    recipe.setRecipeId(existingRecipe.getRecipeId());
     return recipeRepository.save(recipe);
   }
 
   @Override
-  public void deleteRecipe(Long id) {
-    recipeRepository.deleteById(id);
+  public void deleteRecipe(Long recipeId) {
+    recipeRepository.deleteById(recipeId);
   }
 
   @Override

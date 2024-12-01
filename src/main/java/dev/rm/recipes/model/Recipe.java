@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import jakarta.persistence.*;
+
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.hibernate.annotations.OnDelete;
@@ -26,7 +28,7 @@ public class Recipe {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name = "id")
-  private Long id;
+  private Long recipeId;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "id_user")
@@ -60,6 +62,18 @@ public class Recipe {
 
   @Column(name = "instructions", nullable = false)
   private String instructions;
+
+  @OneToMany(mappedBy = "recipe", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  @JsonManagedReference
+  private List<Like> likes;
+
+  @Column(name = "created_at", nullable = false, updatable = false)
+  private LocalDateTime createdAt;
+
+  @PrePersist
+  protected void onCreate() {
+    createdAt = LocalDateTime.now();
+  }
 
   public Long getUserId() {
     return user != null ? user.getUserId() : null;

@@ -39,31 +39,6 @@ public class CommentController {
     return new ResponseEntity<>(comments, HttpStatus.OK);
   }
 
-  // @PostMapping("/{recipeId}/comments")
-  // public ResponseEntity<Comment> createComment(@PathVariable Long recipeId,
-  // @RequestBody Comment comment) {
-
-  // try {
-  // Authentication authentication =
-  // SecurityContextHolder.getContext().getAuthentication();
-  // String currentUsername = authentication.getName();
-
-  // User user = userService.getUserByEmail(currentUsername);
-
-  // Recipe recipe = recipeService.getRecipeById(recipeId);
-
-  // comment.setUser(user);
-  // comment.setRecipe(recipe);
-
-  // Comment createdComment = commentService.createComment(comment);
-
-  // return new ResponseEntity<>(createdComment, HttpStatus.CREATED);
-  // } catch (BadWordException e) {
-  // ErrorResponse errorResponse = new ErrorResponse(e.getMessage(), "BAD_WORDS");
-  // return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
-  // }
-  // }
-
   @PostMapping("/{recipeId}/comments")
   public ResponseEntity<Object> createComment(@PathVariable Long recipeId, @RequestBody Comment comment) {
     try {

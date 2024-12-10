@@ -43,6 +43,9 @@ public class RecipeServiceImpl implements RecipeService {
 
   @Override
   public void deleteRecipe(Long recipeId) {
+    if (!recipeRepository.existsById(recipeId)) {
+      throw new RuntimeException("Recipe not found");
+    }
     recipeRepository.deleteById(recipeId);
   }
 

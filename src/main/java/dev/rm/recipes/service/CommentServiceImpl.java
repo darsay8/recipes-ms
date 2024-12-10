@@ -33,13 +33,11 @@ public class CommentServiceImpl implements CommentService {
 
   @Override
   public Comment createComment(Comment comment) {
-
     if (filterCommentsService.containsBadWords(comment.getContent())) {
       log.warn("Comment contains bad words: {}", comment.getContent());
       throw new BadWordException("Comment contains bad words");
     }
 
     return commentRepository.save(comment);
-
   }
 }

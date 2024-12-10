@@ -9,11 +9,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -26,6 +32,7 @@ public class JwtTokenProvider {
   public JwtTokenProvider(
       @Value("${spring.security.jwt.secret}") String jwtSecret,
       @Value("${spring.security.jwt.expiration}") long jwtExpirationInMs) {
+
     if (jwtSecret == null || jwtSecret.isEmpty()) {
       throw new IllegalArgumentException("JWT secret is not configured");
     }
@@ -33,9 +40,22 @@ public class JwtTokenProvider {
       throw new IllegalArgumentException("JWT expiration must be greater than zero");
     }
 
-    this.key = Keys.hmacShaKeyFor(jwtSecret.getBytes(StandardCharsets.UTF_8));
+    // Ensure the key is at least 256 bits
+    this.key = createSecureKey(jwtSecret);
     this.jwtExpirationInMs = jwtExpirationInMs;
+  }
 
+  private SecretKey createSecureKey(String secret) {
+    try {
+      // Hash the key to ensure it is 256 bits (32 bytes)
+      MessageDigest digest = MessageDigest.getInstance("SHA-256");
+      byte[] hashedKey = digest.digest(secret.getBytes(StandardCharsets.UTF_8));
+
+      // Use the hashed key for HMAC
+      return Keys.hmacShaKeyFor(hashedKey);
+    } catch (NoSuchAlgorithmException e) {
+      throw new IllegalStateException("Unable to generate a secure key for JWT", e);
+    }
   }
 
   public String generateToken(Authentication authentication) {
@@ -88,12 +108,28 @@ public class JwtTokenProvider {
     return claims.get("roles", String.class);
   }
 
+  public List<String> getRolesCollectionFromToken(String token) {
+    Claims claims = extractAllClaims(token);
+
+    return Arrays.asList(claims.get("roles", String[].class));
+  }
+
+  public Collection<? extends GrantedAuthority> getAuthoritiesFromToken(String token) {
+    Claims claims = extractAllClaims(token);
+
+    String[] roles = claims.get("roles", String[].class);
+
+    return Arrays.stream(roles)
+        .map(SimpleGrantedAuthority::new)
+        .collect(Collectors.toList());
+  }
+
   public String extractClaim(String token, String claimKey) {
     Claims claims = extractAllClaims(token);
     return claims.get(claimKey, String.class);
   }
 
-  private Claims extractAllClaims(String token) {
+  public Claims extractAllClaims(String token) {
     return Jwts.parser()
         .verifyWith(key)
         .build()

@@ -3,6 +3,7 @@ package dev.rm.recipes.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import dev.rm.recipes.model.Like;
@@ -13,6 +14,7 @@ public class LikeServiceImpl implements LikeService {
 
   private final LikeRepository likeRepository;
 
+  @Autowired
   public LikeServiceImpl(LikeRepository likeRepository) {
     this.likeRepository = likeRepository;
   }

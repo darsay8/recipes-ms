@@ -75,17 +75,4 @@ public class LikeController {
     return new ResponseEntity<>(likeCount, HttpStatus.OK);
   }
 
-  // @GetMapping("/{id}/likes/total")
-  // public ResponseEntity<Map<String, Object>> getRecipeById(@PathVariable Long
-  // id) {
-  // try {
-  // long likeCount = recipeService.getLikeCount(id);
-  // Map<String, Object> response = new HashMap<>();
-  // response.put("likeCount", likeCount);
-  // return ResponseEntity.ok(response);
-  // } catch (RuntimeException e) {
-  // return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error",
-  // "Recipe not found"));
-  // }
-  // }
 }

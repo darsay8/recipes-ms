@@ -1,8 +1,10 @@
 package dev.rm.recipes.controller;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import dev.rm.recipes.exception.UserNotFoundException;
 import dev.rm.recipes.model.User;
 import dev.rm.recipes.service.UserService;
 import lombok.extern.slf4j.Slf4j;
@@ -14,7 +16,7 @@ import java.util.List;
 @RequestMapping("/api")
 public class UserController {
 
-  private UserService userService;
+  private final UserService userService;
 
   public UserController(UserService userService) {
     this.userService = userService;
@@ -59,9 +61,12 @@ public class UserController {
       User updatedUser = userService.updateUser(id, user);
       log.info("Updated user with id {}", id);
       return ResponseEntity.ok(updatedUser);
+    } catch (UserNotFoundException e) {
+      log.error("User not found for update: {}", e.getMessage());
+      return ResponseEntity.notFound().build(); // Return 404 if user is not found
     } catch (RuntimeException e) {
       log.error("Error updating user with id {}: {}", id, e.getMessage());
-      return ResponseEntity.notFound().build();
+      return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build(); // Return 500 if any other error occurs
     }
   }
 
